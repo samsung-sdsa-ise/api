@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.samsung.api.persistence.FruitMapper">
+
+	<resultMap id="FruitResultMap" type="Fruit">
+		<result column="ID" property="id" />
+		<result column="NAME" property="name" />
+		<result column="CREATE_DATE" property="create_date" />
+		<result column="UPDATE_DATE" property="update_date" />
+	</resultMap>
+	
+	<!-- <sql id="paging_header">
+		SELECT A.*
+		FROM (
+	</sql>
+	
+	<sql id="paging_footer">
+		) A
+		WHERE A.ROW_SEQ BETWEEN #{per_page}*(#{page}-1) + 1 and #{per_page}*#{page}
+	</sql> -->
+	
+	<sql id="fruitList_column">
+		ID,
+		NAME,
+		CREATE_DATE,
+		UPDATE_DATE
+	</sql>
+	
+	<sql id="fruit_where" >
+		<if test="id != '' and id != null">
+			AND ID = #{id}
+		</if>
+		<if test="name != '' and name != null">
+			AND UPPER(NAME) LIKE UPPER('%'|| #{name} ||'%')
+		</if>
+	</sql>
+	
+	<select id="selectFruitListTotal" resultType="int" parameterType="Fruit">
+		SELECT COUNT(1)
+		FROM FRUIT
+		WHERE 1=1
+		<include refid="fruit_where" />
+	</select>
+	
+	<select id="selectFruitList" resultMap="FruitResultMap" parameterType="Fruit">
+		SELECT <include refid="fruitList_column" />
+		FROM FRUIT
+		WHERE 1=1
+		<include refid="fruit_where" />
+	</select>
+	
+	<insert id="insertFruit" parameterType="Fruit">
+		INSERT INTO FRUIT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			CREATE_DATE,
+			UPDATE_DATE,
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="name != null">
+				#{name},
+			</if>
+			SYSDATE,
+			SYSDATE,
+		</trim>
+	</insert>
+	
+	<update id="updateFruit" parameterType="Fruit">
+		UPDATE FRUIT
+		SET 
+		<trim suffixOverrides=",">
+			<if test="name != null">
+				NAME = #{name},
+			</if>
+			UPDATE_DATE = SYSDATE,
+		</trim>
+		WHERE 1=1
+		AND ID = #{id}
+	</update>
+	
+	<delete id="deleteFruit" parameterType="Fruit">
+		DELETE FROM FRUIT
+		WHERE 1=1
+		<include refid="fruit_where" />
+	</delete>
+	
+</mapper>

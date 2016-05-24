@@ -1,0 +1,58 @@
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans     
+				        http://www.springframework.org/schema/beans/spring-beans.xsd
+				        http://www.springframework.org/schema/context 
+				        http://www.springframework.org/schema/context/spring-context.xsd
+				        http://www.springframework.org/schema/mvc
+				        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<context:component-scan base-package="com.samsung.api.controller" />
+	
+	<mvc:annotation-driven />
+	
+	<!-- ContentNegotiatingViewResolver -->
+	<!-- @Controllers may resolve JSON responses -->
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="order" value="1" />
+	  	<property name="ignoreAcceptHeader" value="true" />
+		
+		<!-- Accepted media types -->
+		<property name="mediaTypes">
+			<map>
+				<entry key="json" value="application/json" />
+			</map>
+		</property>
+		
+		<!-- Default views for the above accepted media types -->
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- InternalResourceViewResolver -->
+	<!-- @Controllers may resolve strings as views (i.e. "index" resolves to "index.jsp") -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="2"></property>
+		<property name="prefix">
+			<value>/WEB-INF/pages/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	</bean> -->
+	
+	<!-- API key interceptor -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.samsung.api.common.filter.APIKeyInterceptor" />
+		</mvc:interceptor>	
+	</mvc:interceptors>
+	
+</beans>
