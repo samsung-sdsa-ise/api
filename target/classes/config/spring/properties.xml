@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd 
+						http://www.springframework.org/schema/util 
+						http://www.springframework.org/schema/util/spring-util.xsd">
+	
+	<!-- system.properties -->
+	<util:properties id="system" location="classpath:/config/properties/system.properties" />
+	
+	<!-- database.properties -->
+	<util:properties id="database" location="classpath:/config/properties/database.properties" />
+	
+	<!-- message.properties -->
+	<bean id="messageSourceAccessor" class="org.springframework.context.support.MessageSourceAccessor">
+		<constructor-arg ref="messageSource" />
+	</bean>
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:/config/properties/messages</value>
+			</list>
+		</property>
+		<property name="cacheSeconds" value="5" />
+	</bean>
+	
+	
+</beans>

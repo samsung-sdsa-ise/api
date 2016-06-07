@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+
+<log4j:configuration 
+	xmlns:log4j="http://jakarta.apache.org/log4j/">
+	
+	<!-- Root Logger -->
+	<root>
+		<priority value="warn" />
+		<appender-ref ref="console" />
+		<appender-ref ref="logfile-daily" />
+	</root>
+	
+	<!-- Console appender -->
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} [%5p] %m (%C:%L) %n" />
+		</layout>
+	</appender>
+	
+	<!-- Logfile appender -->
+	<appender name="logfile-daily" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="C:/Users/GENE/Desktop/eclipse-workspace/logs/api.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%t] %-17c{2} (%13F:%L) %3x - %m%n" />
+		</layout>
+	</appender>
+	
+	<!-- Application Loggers -->
+	<logger name="com.samsung">
+		<level value="debug" />
+	</logger>
+	
+	<!-- 3rd party Loggers -->
+	<logger name="org.springframework">
+		<level value="info" />
+	</logger>
+	<logger name="org.springframework.jdbc.core.JdbcTemplate">
+		<level value="trace" />
+	</logger>
+	
+	<!-- LOG4JDBC -->
+	<logger name="jdbc.sqlonly">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.audit">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.resultset">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.resultsettable">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.connection">
+		<level value="error" />
+	</logger>
+	<logger name="jdbc.sqltiming">
+		<level value="info" />
+	</logger>
+	
+	
+</log4j:configuration>
